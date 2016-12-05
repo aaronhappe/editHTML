@@ -9,7 +9,7 @@ function getAllComments(rootElem) {
         // curNode.nodeValue = "cat";
         // console.log(curNode.nextSibling);
         var myDiv = document.createElement("<div");
-                    parseHTML(myDiv);
+            myDiv.className = 
         curNode.parentNode.insertBefore(myDiv, curNode.nextSibling);
     }
     return comments;
@@ -18,3 +18,33 @@ function getAllComments(rootElem) {
 // window.addEventListener("load", function() {
     console.log(getAllComments(document.body));
 // });
+
+// $("<div id='editorTool'><div>").insertAfter("body");
+
+var myEditor = $("<div/>",{
+    className : "myEditor"
+}),
+ulShops = $("<ul/>",{
+    className : "shopName"
+}),
+shopStartRegGlobal = new RegExp(/<\!-- Shop:\d+_([\w-_/d]+\s\[[\w]+\])\sSTART -->/, "g"),
+shopStartReg = new RegExp(/<\!-- Shop:\d+_([\w-_/d]+)\s\[[\w]+\]\sSTART -->/),
+shopEndRegGlobal = new RegExp(/<\!-- Shop:\d+_([\w-]+\s\[[\w]+\])\sEND -->/, "g"),
+bodyHTML = $('body').html(),
+shopMatchs = bodyHTML.match(/<\!-- Shop:\d+_([\w-]+\s\[[\w]+\])\sSTART -->/gi);
+shopLi = "";
+
+shopLi = $.map(shopMatchs, function( val ){
+     var shopNameMatch = val.match(shopStartReg),
+     shopNames = $("<li/>", {
+        text: shopNameMatch[1]
+     }) ;
+     shopNames.appendTo(ulShops);
+});
+
+ulShops.appendTo(myEditor);
+myEditor.appendTo('body');
+
+$("ul.shopName li").click(function(){
+    
+});
