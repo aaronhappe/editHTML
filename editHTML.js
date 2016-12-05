@@ -1,38 +1,17 @@
-function getAllComments(rootElem) {
-    var comments = [];
-    // Fourth argument, which is actually obsolete according to the DOM4 standard, is required in IE 11
-    var iterator = document.createNodeIterator(rootElem, NodeFilter.SHOW_COMMENT, filterNone, false);
-    var curNode;
-    while (curNode = iterator.nextNode()) {
-        // $(curNode).parent('.hero').html('asdf');
-        // comments.push(curNode.nodeValue);
-        // curNode.nodeValue = "cat";
-        // console.log(curNode.nextSibling);
-        var myDiv = document.createElement("<div");
-            myDiv.className = 
-        curNode.parentNode.insertBefore(myDiv, curNode.nextSibling);
-    }
-    return comments;
-}
-
-// window.addEventListener("load", function() {
-    console.log(getAllComments(document.body));
-// });
-
-// $("<div id='editorTool'><div>").insertAfter("body");
-
 var myEditor = $("<div/>",{
-    className : "myEditor"
+    class : "myEditor"
 }),
 ulShops = $("<ul/>",{
-    className : "shopName"
+    class : "shopName"
 }),
 shopStartRegGlobal = new RegExp(/<\!-- Shop:\d+_([\w-_/d]+\s\[[\w]+\])\sSTART -->/, "g"),
 shopStartReg = new RegExp(/<\!-- Shop:\d+_([\w-_/d]+)\s\[[\w]+\]\sSTART -->/),
 shopEndRegGlobal = new RegExp(/<\!-- Shop:\d+_([\w-]+\s\[[\w]+\])\sEND -->/, "g"),
 bodyHTML = $('body').html(),
-shopMatchs = bodyHTML.match(/<\!-- Shop:\d+_([\w-]+\s\[[\w]+\])\sSTART -->/gi);
-shopLi = "";
+shopMatchs = bodyHTML.match(shopStartRegGlobal),
+shopLi = "",
+$shopLi = $("ul.shopName li"),
+$selectedShop = "";
 
 shopLi = $.map(shopMatchs, function( val ){
      var shopNameMatch = val.match(shopStartReg),
@@ -45,6 +24,30 @@ shopLi = $.map(shopMatchs, function( val ){
 ulShops.appendTo(myEditor);
 myEditor.appendTo('body');
 
-$("ul.shopName li").click(function(){
-    
+function filterNone() {
+    return NodeFilter.FILTER_ACCEPT;
+}
+
+function getAllComments(rootElem) {
+    var comments = [];
+    // Fourth argument, which is actually obsolete according to the DOM4 standard, is required in IE 11
+    var iterator = document.createNodeIterator(rootElem, NodeFilter.SHOW_COMMENT, filterNone, false);
+    var curNode;
+    while (curNode = iterator.nextNode()) {
+
+        var comment = curNode.nodeValue;
+        comment = comment.trim();
+        if ("End BlueKai Tag" == comment) {
+            console.log("bingo!");
+        }
+    }
+    return comments;
+}
+
+$shopLi.click(function(){
+    $selectedShop = $(this).text();
 });
+
+// window.addEventListener("load", function() {
+    getAllComments(document.body);
+// });
