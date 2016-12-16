@@ -15,7 +15,7 @@ shopRecordWrap2 = $("<div/>", {
 // regular expressions
 shopStartRegGlobal = new RegExp(/<\!-- Shop:\d+_([\w-_/d]+\s\[[\w]+\])\sSTART -->/, "g"),
 shopStartReg = new RegExp(/<\!-- (Shop:\d+_[\w-_/d]+\s\[[\w]+\]\sSTART) -->/),
-shopStartNameReg = new RegExp(/Shop:\d+_([\w-_/d]+)\s\[[\w]+\]\sSTART/),
+shopStartNameReg = new RegExp(/Shop:\d+_([\w-_/d]+\s\[[\w]+\])\sSTART/),
 shopGeneralReg = new RegExp(/Shop:\d+_([\w-]+\s\[[\w]+\])\s/),
 
 //perform operation to get value
@@ -49,6 +49,8 @@ funcs.clickHandlers = function() {
     $("ul.shopName li").click(function(){
         var selectedShopData = $(this).data('sR');
         var shopClassName = $(this).text();
+        shopClassName = shopClassName.replace(/(\s\[)/i, '');
+        shopClassName = shopClassName.replace(/\]/i, '');
         var generalShop = selectedShopData.match(shopGeneralReg);
         var endShop = generalShop[0] += "END";
         funcs.getAllComments(document.body, selectedShopData, endShop, shopClassName);
@@ -76,6 +78,7 @@ funcs.insertShopContainer = function(curNode, comment, selectedShopData, endShop
     if (comment == selectedShopData){
         shopRecordWrap.insertAfter($(curNode));
         shopRecordWrap.addClass(shopClassName);
+        console.log(selectedShopData);
         // $('.shopRecordWrap').addClass(shopClassName);
     } 
     if (comment == endShop) {
