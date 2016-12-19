@@ -53,6 +53,11 @@ funcs.clickHandlers = function() {
         var endShop = generalShop[0] += "END";
         funcs.getAllComments(document.body, selectedShopData, endShop, shopClassName);
     });
+
+    $( "p" ).click(function( event ) {
+          event.stopPropagation();
+          // Do something
+    });
 }
 
 funcs.findFullShopName = function(){
